@@ -1,5 +1,5 @@
 import express from "express";
-import { getCryptoStats, getCryptoDeviation } from "../controllers/cryptoController.js";
+import { getCryptoStats,getCryptoDeviation } from "../controllers/cryptoControllers.js";
 
 const router = express.Router();
 
