@@ -1,4 +1,4 @@
-import Crypto from "../models/crypto.js";
+import Crypto from "../modals/crypto.js";
 
 // Controller for fetching the latest stats
 export const getCryptoStats = async (req, res) => {
