@@ -1,0 +1,37 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { connectDB } from "./src/lib/db.js";
+import fetchCryptoData from "./src/jobs/Background.js";
+import cryptoRoute from "./src/routes/cryptoRoute.js";
+
+const app = express();
+dotenv.config();
+app.use(express.json());
+app.use(
+  cors({
+    origin: "*", // Allows all origins
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
+
+// Routes
+app.use("/api", cryptoRoute);
+
+const PORT = process.env.PORT || 5001;
+
+setInterval(async () => {
+  console.log("Fetching cryptocurrency data...");
+  try {
+    await fetchCryptoData();
+    console.log("Data fetched successfully.");
+  } catch (error) {
+    console.error("Error in scheduled task:", error.message);
+  }
+}, 2 * 60 * 60 * 1000);
+
+app.listen(PORT, () => {
+  console.log("server running on port " + PORT);
+  connectDB();
+});
