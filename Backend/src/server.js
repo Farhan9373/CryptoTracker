@@ -1,13 +1,20 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./lib/db.js";
 import fetchCryptoData from "./jobs/Background.js";
-import cryptoRoute from "./routes/cryptoRoute.js"
-
+import cryptoRoute from "./routes/cryptoRoute.js";
 
 const app = express();
 dotenv.config();
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*", // Allows all origins
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 
 // Routes
 app.use("/api", cryptoRoute);
@@ -22,9 +29,7 @@ setInterval(async () => {
   } catch (error) {
     console.error("Error in scheduled task:", error.message);
   }
-}, 2 * 60 * 60 * 1000); 
-
-
+}, 2 * 60 * 60 * 1000);
 
 app.listen(PORT, () => {
   console.log("server running on port " + PORT);
